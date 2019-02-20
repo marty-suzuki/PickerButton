@@ -10,7 +10,7 @@ import UIKit
 
 open class PickerButton: UIButton {
 
-    public private(set) var values: [String] = []
+    public private(set) var selectedValues: [String] = []
     private let picker = UIPickerView()
 
     private var delegateProxy: UIPickerViewDelegateProxy?
@@ -21,7 +21,7 @@ open class PickerButton: UIButton {
                 guard let me = self else {
                     return
                 }
-                me.values[$0.component] = $0.title
+                me.selectedValues[$0.component] = $0.title
                 me.updateTitle()
             }
             picker.delegate = delegateProxy
@@ -32,7 +32,7 @@ open class PickerButton: UIButton {
                 return
             }
 
-            self.values = (0..<components).map {
+            self.selectedValues = (0..<components).map {
                 guard picker.numberOfRows(inComponent: $0) > 0 else {
                     return ""
                 }
@@ -126,7 +126,7 @@ open class PickerButton: UIButton {
             return
         }
 
-        let title = values.reduce(into: "") { result, title in
+        let title = selectedValues.reduce(into: "") { result, title in
             if result.isEmpty {
                 result += title
             } else {
@@ -142,7 +142,7 @@ open class PickerButton: UIButton {
 extension PickerButton: UIKeyInput {
 
     public var hasText: Bool {
-        return !values.isEmpty
+        return !selectedValues.isEmpty
     }
 
     public func insertText(_ text: String) {}
