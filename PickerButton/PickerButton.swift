@@ -10,7 +10,7 @@ import UIKit
 
 open class PickerButton: UIButton {
 
-    private var _value: String = ""
+    public private(set) var values: [String] = []
     private let picker = UIPickerView()
 
     private var delegateProxy: UIPickerViewDelegateProxy?
@@ -18,10 +18,27 @@ open class PickerButton: UIButton {
         set {
             let delegateProxy = UIPickerViewDelegateProxy(newValue)
             delegateProxy.titleChanged = { [weak self] in
-                self?.insertText($0)
+                guard let me = self else {
+                    return
+                }
+                me.values[$0.component] = $0.title
+                me.updateTitle()
             }
             picker.delegate = delegateProxy
             self.delegateProxy = delegateProxy
+
+            let components = picker.numberOfComponents
+            guard components > 0 else {
+                return
+            }
+
+            self.values = (0..<components).map {
+                guard picker.numberOfRows(inComponent: $0) > 0 else {
+                    return ""
+                }
+                return picker.delegate?.pickerView?(picker, titleForRow: 0, forComponent: $0) ?? ""
+            }
+            updateTitle()
         }
         get {
             return delegateProxy
@@ -48,14 +65,21 @@ open class PickerButton: UIButton {
 
     open var closeButtonTitle: String = "Done"
 
+    /// If set true, title is updated automatically when a picker item is selected
+    ///
+    /// - note: Default is true
+    open var shouldUpdateTitleAutomatically = true
+
     override open var canBecomeFirstResponder: Bool {
         return true
     }
 
+    /// - note: always returns UIPickerView instalce
     override open var inputView: UIView? {
         return picker
     }
 
+    /// - note: always returns UIToolbar instalce that contains close button
     override open var inputAccessoryView: UIView? {
         let toolbar = UIToolbar()
         toolbar.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: 44)
@@ -96,18 +120,32 @@ open class PickerButton: UIButton {
     @objc private func didTap(_ button: PickerButton) {
         becomeFirstResponder()
     }
+
+    private func updateTitle() {
+        guard shouldUpdateTitleAutomatically else {
+            return
+        }
+
+        let title = values.reduce(into: "") { result, title in
+            if result.isEmpty {
+                result += title
+            } else {
+                result += (" " + title)
+            }
+        }
+        setTitle(title, for: [])
+    }
 }
+
+// MARK: - UIKeyInput
 
 extension PickerButton: UIKeyInput {
 
     public var hasText: Bool {
-        return !_value.isEmpty
+        return !values.isEmpty
     }
 
-    public func insertText(_ text: String) {
-        _value = text
-        setTitle(text, for: [])
-    }
+    public func insertText(_ text: String) {}
 
     public func deleteBackward() {}
 }
