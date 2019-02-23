@@ -8,6 +8,14 @@
 
 import UIKit
 
+public protocol PickerButtonDelegate: UIPickerViewDelegate {
+    func pickerButtonDidClose(_ pickerButton: PickerButton)
+}
+
+extension PickerButtonDelegate {
+    public func pickerButtonDidClose(_ pickerButton: PickerButton) {}
+}
+
 open class PickerButton: UIButton {
 
     public private(set) var selectedValues: [String] = []
@@ -115,6 +123,7 @@ open class PickerButton: UIButton {
 
     @objc private func didTapClose(_ button: UIBarButtonItem) {
         resignFirstResponder()
+        (delegateProxy?.delegate as? PickerButtonDelegate)?.pickerButtonDidClose(self)
     }
 
     @objc private func didTap(_ button: PickerButton) {
