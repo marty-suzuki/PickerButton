@@ -12,6 +12,19 @@ PickerButton is subclass of UIButton that presents UIPickerView in keyboard.
 
 ![](./Images/picker.gif)
 
+## Concept
+
+When PickerButton is tapped, it presents UIPickerView on UIKeyboard.
+
+| PickerButton | inputView | inputAccessoryView |
+| :-: | :-: | :-: |
+| PickerButton is in conformity to [UIKeyInput](https://developer.apple.com/documentation/uikit/uikeyinput). | PickerButton returns UIPickerView as [inputView](https://developer.apple.com/documentation/uikit/uiresponder/1621092-inputview). | PickerButton returns UIToolBar as [inputAccessoryView](https://developer.apple.com/documentation/uikit/uiresponder/1621119-inputaccessoryview). |
+| ![](./Images/button.jpg) | ![](./Images/picker.jpg) | ![](./Images/inputview.jpg) |
+
+
+When selected row or component is changed, button title is automatically updated.
+
+
 ## Usage
 
 PickerButton is almost same interface as UIPickerView.
@@ -47,7 +60,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 }
 ```
 
-To use PickerButton in Storyboard / Xib, set Custom Class to `PickerBUtton`.
+To use PickerButton in Storyboard / Xib, set Custom Class to `PickerButton`.
 
 ![](./Images/storyboard.png)
 
