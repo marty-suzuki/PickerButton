@@ -147,7 +147,24 @@ open class PickerButton: UIButton {
 
     /// scrolls the specified row to center.
     open func selectRow(_ row: Int, inComponent component: Int, animated: Bool) {
+        let components = picker.numberOfComponents
+        guard components > 0, picker.numberOfRows(inComponent: component) > row else {
+            return
+        }
+
         picker.selectRow(row, inComponent: component, animated: animated)
+
+        self.selectedValues = (0..<components).map {
+            guard picker.numberOfRows(inComponent: $0) > 0 else {
+                return ""
+            }
+            if $0 == component {
+                return picker.delegate?.pickerView?(picker, titleForRow: row, forComponent: $0) ?? ""
+            } else {
+                return picker.delegate?.pickerView?(picker, titleForRow: 0, forComponent: $0) ?? ""
+            }
+        }
+        updateTitle()
     }
 
     /// returns selected row. -1 if nothing selected
