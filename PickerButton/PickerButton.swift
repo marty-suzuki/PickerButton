@@ -144,6 +144,16 @@ open class PickerButton: UIButton {
         }
         setTitle(title, for: [])
     }
+
+    /// scrolls the specified row to center.
+    open func selectRow(_ row: Int, inComponent component: Int, animated: Bool) {
+        picker.selectRow(row, inComponent: component, animated: animated)
+    }
+
+    /// returns selected row. -1 if nothing selected
+    open func selectedRow(inComponent component: Int) -> Int {
+        return picker.selectedRow(inComponent: component)
+    }
 }
 
 // MARK: - UIKeyInput
