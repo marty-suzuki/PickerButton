@@ -11,6 +11,8 @@ import PickerButton
 
 class ViewController: UIViewController {
 
+    
+
     @IBOutlet weak var singlePickerButton: PickerButton! {
         didSet {
             singlePickerButton.layer.masksToBounds = true
@@ -27,7 +29,6 @@ class ViewController: UIViewController {
     let singleDataSource = SinglePickerDetaSource()
     let doubleDataSource = DoublePickerDetaSource()
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +37,17 @@ class ViewController: UIViewController {
 
         doublePickerButton.delegate = doubleDataSource
         doublePickerButton.dataSource = doubleDataSource
+
+        self.setSomePresetValue()
+    }
+
+    func setSomePresetValue() {
+
+        for component in (0..<self.doubleDataSource.pickerValues.count) {
+            if let index = self.doubleDataSource.currentIndex(forComponent: component) {
+                self.doublePickerButton.selectRow(index, inComponent: component, animated: false)
+            }
+        }
     }
 }
 
@@ -71,5 +83,16 @@ final class DoublePickerDetaSource: NSObject, UIPickerViewDelegate, UIPickerView
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerValues[component].count
+    }
+
+    func currentIndex(forComponent component: Int) -> Int? {
+        switch component {
+        case 0:
+            return 1 //1-second
+        case 1:
+            return 2 //2-third
+        default:
+            fatalError("unhandled ")
+        }
     }
 }
