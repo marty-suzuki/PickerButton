@@ -73,6 +73,8 @@ open class PickerButton: UIButton {
 
     open var closeButtonTitle: String = "Done"
 
+    open var buttonTitleSeparator: String = " "
+
     /// If set true, title is updated automatically when a picker item is selected
     ///
     /// - note: Default is true
@@ -139,7 +141,7 @@ open class PickerButton: UIButton {
             if result.isEmpty {
                 result += title
             } else {
-                result += (" " + title)
+                result += (self.buttonTitleSeparator + title)
             }
         }
         setTitle(title, for: [])
