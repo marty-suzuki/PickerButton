@@ -159,11 +159,8 @@ open class PickerButton: UIButton {
             guard picker.numberOfRows(inComponent: $0) > 0 else {
                 return ""
             }
-            if $0 == component {
-                return picker.delegate?.pickerView?(picker, titleForRow: row, forComponent: $0) ?? ""
-            } else {
-                return picker.delegate?.pickerView?(picker, titleForRow: 0, forComponent: $0) ?? ""
-            }
+            let selectedIndex = picker.selectedRow(inComponent: $0)
+            return picker.delegate?.pickerView?(picker, titleForRow: selectedIndex, forComponent: $0) ?? ""
         }
         updateTitle()
     }
