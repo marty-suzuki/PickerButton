@@ -153,6 +153,7 @@ open class PickerButton: UIButton {
         }
 
         picker.selectRow(row, inComponent: component, animated: animated)
+        picker.delegate?.pickerView?(picker, didSelectRow: row, inComponent: component)
 
         self.selectedValues = (0..<components).map {
             guard picker.numberOfRows(inComponent: $0) > 0 else {
