@@ -73,6 +73,8 @@ open class PickerButton: UIButton {
 
     open var closeButtonTitle: String = "Done"
 
+    open var buttonTitleSeparator: String = " "
+
     /// If set true, title is updated automatically when a picker item is selected
     ///
     /// - note: Default is true
@@ -139,7 +141,7 @@ open class PickerButton: UIButton {
             if result.isEmpty {
                 result += title
             } else {
-                result += (" " + title)
+                result += (self.buttonTitleSeparator + title)
             }
         }
         setTitle(title, for: [])
@@ -153,16 +155,14 @@ open class PickerButton: UIButton {
         }
 
         picker.selectRow(row, inComponent: component, animated: animated)
+        picker.delegate?.pickerView?(picker, didSelectRow: row, inComponent: component)
 
         self.selectedValues = (0..<components).map {
             guard picker.numberOfRows(inComponent: $0) > 0 else {
                 return ""
             }
-            if $0 == component {
-                return picker.delegate?.pickerView?(picker, titleForRow: row, forComponent: $0) ?? ""
-            } else {
-                return picker.delegate?.pickerView?(picker, titleForRow: 0, forComponent: $0) ?? ""
-            }
+            let selectedIndex = picker.selectedRow(inComponent: $0)
+            return picker.delegate?.pickerView?(picker, titleForRow: selectedIndex, forComponent: $0) ?? ""
         }
         updateTitle()
     }
