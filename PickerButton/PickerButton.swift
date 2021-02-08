@@ -74,6 +74,9 @@ open class PickerButton: UIButton {
     open var closeButtonTitle: String = "Done"
 
     open var buttonTitleSeparator: String = " "
+	
+	open var toolbarBackgroundColor: UIColor = .white
+	open var toolbarItemColor: UIColor = .blue
 
     /// If set true, title is updated automatically when a picker item is selected
     ///
@@ -101,8 +104,12 @@ open class PickerButton: UIButton {
                                     target: nil,
                                     action: nil)
         let items = [space, closeButton]
+		for item in items {
+			item.tintColor = toolbarItemColor
+		}
         toolbar.setItems(items, animated: false)
         toolbar.sizeToFit()
+		toolbar.barTintColor = toolbarBackgroundColor
 
         return toolbar
     }
